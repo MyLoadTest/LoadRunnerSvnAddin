@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <ProjectGuid>{17F4D7E0-6933-4C2E-8714-FD7E98D625D5}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MyLoadTest.LoadRunnerSvnAddin</RootNamespace>
+    <AssemblyName>MyLoadTest.LoadRunnerSvnAddin</AssemblyName>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkVersion Condition=" '$(TargetFrameworkVersion)' == '' ">v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugSymbols>true</DebugSymbols>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.Core">
+      <HintPath>..\..\lib\SharpDevelop\ICSharpCode.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.Core.WinForms">
+      <HintPath>..\..\lib\SharpDevelop\ICSharpCode.Core.WinForms.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpDevelop">
+      <HintPath>..\..\lib\SharpDevelop\ICSharpCode.SharpDevelop.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpDevelop.Dom">
+      <HintPath>..\..\lib\SharpDevelop\ICSharpCode.SharpDevelop.Dom.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SharpSvn">
+      <HintPath>..\..\lib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI">
+      <HintPath>..\..\lib\SharpSvn\SharpSvn.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+    <None Include="MyLoadTest.LoadRunnerSvnAddin.addin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <Compile Include="ChangedPath.cs" />
+    <Compile Include="Commands\AboutCommand.cs" />
+    <Compile Include="Commands\AddCommand.cs" />
+    <Compile Include="Commands\ApplyPatchCommand.cs" />
+    <Compile Include="Commands\BlameCommand.cs" />
+    <Compile Include="Commands\BranchCommand.cs" />
+    <Compile Include="Commands\CheckoutCommand.cs" />
+    <Compile Include="Commands\CleanupCommand.cs" />
+    <Compile Include="Commands\CommitCommand.cs" />
+    <Compile Include="Commands\CreatePatchCommand.cs" />
+    <Compile Include="Commands\DiffCommand.cs" />
+    <Compile Include="Commands\EditConflictsCommand.cs" />
+    <Compile Include="Commands\ExportWorkingCopyCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\IgnoreCommand.cs" />
+    <Compile Include="Commands\LockCommand.cs" />
+    <Compile Include="Commands\MergeCommand.cs" />
+    <Compile Include="Commands\RelocateCommand.cs" />
+    <Compile Include="Commands\RepoBrowserCommand.cs" />
+    <Compile Include="Commands\RepoStatusCommand.cs" />
+    <Compile Include="Commands\ResolveConflictsCommand.cs" />
+    <Compile Include="Commands\RevertCommand.cs" />
+    <Compile Include="Commands\RevisionGraphCommand.cs" />
+    <Compile Include="Commands\SettingsCommand.cs" />
+    <Compile Include="Commands\ShowLogCommand.cs" />
+    <Compile Include="Commands\SwitchCommand.cs" />
+    <Compile Include="Commands\UnignoreCommand.cs" />
+    <Compile Include="Commands\UpdateCommand.cs" />
+    <Compile Include="Commands\UpdateToRevisionCommand.cs" />
+    <Compile Include="Gui\HistoryViewDisplayBinding\InfoPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\HistoryViewDisplayBinding\InfoPanel.Designer.cs">
+      <DependentUpon>InfoPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddInOptions.cs" />
+    <Compile Include="KnownError.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="NotificationEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Resources\SubversionOptionsPanel.xfrm" />
+    <Compile Include="Commands\RegisterEventsCommand.cs" />
+    <Compile Include="Commands\SubversionCommand.cs" />
+    <Compile Include="Gui\HistoryViewDisplayBinding\HistoryView.cs" />
+    <Compile Include="Gui\HistoryViewDisplayBinding\HistoryViewDisplayBinding.cs" />
+    <Compile Include="Gui\HistoryViewDisplayBinding\HistoryViewPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\SubversionOptionsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\ProjectBrowserVisitor\OverlayIconManager.cs" />
+    <Compile Include="Gui\SvnGuiWrapper.cs" />
+    <Compile Include="Gui\TortoiseSvnNotFoundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Commands\ExportCommand.cs" />
+    <Compile Include="Recurse.cs" />
+    <Compile Include="Revision.cs" />
+    <Compile Include="Status.cs" />
+    <Compile Include="StatusKind.cs" />
+    <Compile Include="SubversionIsControlledCondition.cs" />
+    <Compile Include="SubversionOperationEventArgs.cs" />
+    <Compile Include="SubversionStateCondition.cs" />
+    <Compile Include="SvnClientException.cs" />
+    <Compile Include="SvnClientWrapper.cs" />
+    <Compile Include="SvnVersionProvider.cs" />
+    <Compile Include="SvnMessageView.cs" />
+    <EmbeddedResource Include="Gui\HistoryViewDisplayBinding\InfoPanel.resx">
+      <DependentUpon>InfoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <PropertyGroup>
+    <PostBuildEvent>@verify other 2&gt;nul
+@setlocal enableextensions enabledelayedexpansion
+@if errorlevel 1 (
+    @echo *** Unable to enable CMD extensions
+    @exit 128
+)
+
+if /i "$(Configuration)" neq "Debug" goto SKIP_DEBUG_COPY
+
+if /i "%25ADDIN_TARGET_PATH%25" equ "" (
+    if "!VUGEN_PATH!" equ "" (@echo *** Cannot find VuGen! VuGen path variable is not set. &amp; @exit 100)
+
+    set ADDIN_TARGET_PATH=!VUGEN_PATH!\AddIns\MyLoadTest\$(ProjectName)
+)
+
+echo *** ADDIN_TARGET_PATH = "%25ADDIN_TARGET_PATH%25"
+echo.
+
+if exist "%25ADDIN_TARGET_PATH%25" (
+    @echo * Cleaning add-in target directory "%25ADDIN_TARGET_PATH%25".
+    rd /s /q "%25ADDIN_TARGET_PATH%25" || @exit 1
+    @echo * Cleaning add-in target directory - DONE.
+    @echo.
+)
+
+@echo * Copying the add-in to target directory "%25ADDIN_TARGET_PATH%25".
+xcopy /f /g /h /r /y "$(TargetDir)\MyLoadTest.*" "%25ADDIN_TARGET_PATH%25\" || @exit 2
+xcopy /f /g /h /r /y "$(TargetDir)\SharpSvn*.dll" "%25ADDIN_TARGET_PATH%25\" || @exit 3
+xcopy /f /g /h /r /y "$(TargetDir)\SharpPlink-Win32.svnExe" "%25ADDIN_TARGET_PATH%25\" || @exit 4
+@echo * Copying the add-in to target directory - DONE.
+@echo.
+
+:SKIP_DEBUG_COPY
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>
