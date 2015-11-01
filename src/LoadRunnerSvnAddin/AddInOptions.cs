@@ -11,11 +11,11 @@ namespace MyLoadTest.LoadRunnerSvnAddin
     {
         public static readonly string OptionsProperty = "MyLoadTest.LoadRunnerSvnAddin.Options";
 
-        private static readonly Properties Properties;
+        private static readonly ICSharpCode.Core.Properties Properties;
 
         static AddInOptions()
         {
-            Properties = PropertyService.Get(OptionsProperty, new Properties());
+            Properties = PropertyService.Get(OptionsProperty, new ICSharpCode.Core.Properties());
         }
 
         public static bool AutomaticallyAddFiles

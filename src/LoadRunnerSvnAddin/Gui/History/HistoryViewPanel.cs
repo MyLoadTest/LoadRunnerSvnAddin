@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using ICSharpCode.Core;
 using ICSharpCode.SharpDevelop.Gui;
 
-namespace MyLoadTest.LoadRunnerSvnAddin.Gui.HistoryViewDisplayBinding
+namespace MyLoadTest.LoadRunnerSvnAddin.Gui.History
 {
     /// <summary>
     /// The panel in the "history" secondary viewcontent. Contains a tabcontol.

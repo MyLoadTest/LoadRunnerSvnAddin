@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpDevelop;
 
-namespace MyLoadTest.LoadRunnerSvnAddin.Gui.HistoryViewDisplayBinding
+namespace MyLoadTest.LoadRunnerSvnAddin.Gui.History
 {
     public class HistoryViewDisplayBinding : ISecondaryDisplayBinding
     {

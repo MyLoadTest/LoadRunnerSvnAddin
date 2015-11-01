@@ -9,8 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using ICSharpCode.Core;
-using ICSharpCode.Core.WinForms;
 using ICSharpCode.SharpDevelop.Project;
+using MyLoadTest.LoadRunnerSvnAddin.Properties;
 
 namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
 {
@@ -22,7 +22,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
         private static readonly Queue<AbstractProjectBrowserTreeNode> Queue = new Queue<AbstractProjectBrowserTreeNode>();
         private static readonly Image[] StatusIcons = new Image[10];
         private static readonly object ClientLock = new object();
-        private static readonly Bitmap StatusImages = WinFormsResourceService.GetBitmap("Icons.Svn.StatusImages");
+        private static readonly Bitmap StatusImages = Resources.SvnStatusImages;
         private static bool _threadRunning;
         private static SvnClientWrapper _client;
         private static bool _subversionDisabled;

@@ -15,7 +15,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui
     {
         public override void LoadPanelContents()
         {
-            SetupFromXmlStream(GetType().Assembly.GetManifestResourceStream("ICSharpCode.Svn.Resources.SubversionOptionsPanel.xfrm"));
+            SetupFromXmlStream(GetType().Assembly.GetManifestResourceStream("MyLoadTest.LoadRunnerSvnAddin.Resources.SubversionOptionsPanel.xfrm"));
             ((CheckBox)ControlDictionary["autoAddFilesCheckBox"]).Checked = AddInOptions.AutomaticallyAddFiles;
             ((CheckBox)ControlDictionary["autoDeleteFilesCheckBox"]).Checked = AddInOptions.AutomaticallyDeleteFiles;
             ((CheckBox)ControlDictionary["autoRenameFilesCheckBox"]).Checked = AddInOptions.AutomaticallyRenameFiles;

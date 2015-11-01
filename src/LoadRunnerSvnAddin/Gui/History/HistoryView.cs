@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using ICSharpCode.SharpDevelop.Gui;
 
-namespace MyLoadTest.LoadRunnerSvnAddin.Gui.HistoryViewDisplayBinding
+namespace MyLoadTest.LoadRunnerSvnAddin.Gui.History
 {
     public class HistoryView : AbstractSecondaryViewContent
     {

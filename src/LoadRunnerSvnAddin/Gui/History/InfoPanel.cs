@@ -12,7 +12,7 @@ using ICSharpCode.Core;
 using ICSharpCode.Core.WinForms;
 using ICSharpCode.SharpDevelop.Gui;
 
-namespace MyLoadTest.LoadRunnerSvnAddin.Gui.HistoryViewDisplayBinding
+namespace MyLoadTest.LoadRunnerSvnAddin.Gui.History
 {
     /// <summary>
     /// Description of InfoPanel.

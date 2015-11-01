@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 
-namespace MyLoadTest.LoadRunnerSvnAddin.Gui.HistoryViewDisplayBinding
+namespace MyLoadTest.LoadRunnerSvnAddin.Gui.History
 {
 	partial class InfoPanel
 	{

@@ -35,7 +35,7 @@
         <DisplayBinding id="SubversionHistoryView"
                 type="Secondary"
                 insertbefore="Text"
-                class="MyLoadTest.LoadRunnerSvnAddin.HistoryViewDisplayBinding" />
+                class="MyLoadTest.LoadRunnerSvnAddin.Gui.History.HistoryViewDisplayBinding" />
     </Path>
 
     <Path name="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem">

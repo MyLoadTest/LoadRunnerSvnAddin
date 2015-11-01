@@ -104,10 +104,10 @@
     <Compile Include="Commands\UnignoreCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\UpdateToRevisionCommand.cs" />
-    <Compile Include="Gui\HistoryViewDisplayBinding\InfoPanel.cs">
+    <Compile Include="Gui\History\InfoPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\HistoryViewDisplayBinding\InfoPanel.Designer.cs">
+    <Compile Include="Gui\History\InfoPanel.Designer.cs">
       <DependentUpon>InfoPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddInOptions.cs" />
@@ -115,12 +115,16 @@
     <Compile Include="LogMessage.cs" />
     <Compile Include="NotificationEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SubversionOptionsPanel.xfrm" />
     <Compile Include="Commands\RegisterEventsCommand.cs" />
     <Compile Include="Commands\SubversionCommand.cs" />
-    <Compile Include="Gui\HistoryViewDisplayBinding\HistoryView.cs" />
-    <Compile Include="Gui\HistoryViewDisplayBinding\HistoryViewDisplayBinding.cs" />
-    <Compile Include="Gui\HistoryViewDisplayBinding\HistoryViewPanel.cs">
+    <Compile Include="Gui\History\HistoryView.cs" />
+    <Compile Include="Gui\History\HistoryViewDisplayBinding.cs" />
+    <Compile Include="Gui\History\HistoryViewPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\SubversionOptionsPanel.cs">
@@ -132,6 +136,11 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\ExportCommand.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Recurse.cs" />
     <Compile Include="Revision.cs" />
     <Compile Include="Status.cs" />
@@ -143,9 +152,12 @@
     <Compile Include="SvnClientWrapper.cs" />
     <Compile Include="SvnVersionProvider.cs" />
     <Compile Include="SvnMessageView.cs" />
-    <EmbeddedResource Include="Gui\HistoryViewDisplayBinding\InfoPanel.resx">
+    <EmbeddedResource Include="Gui\History\InfoPanel.resx">
       <DependentUpon>InfoPanel.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Svn.StatusImages.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>
