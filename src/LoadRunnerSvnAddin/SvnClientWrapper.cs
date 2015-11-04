@@ -207,7 +207,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin
         private void CheckNotDisposed()
         {
             if (_client == null)
-                throw new ObjectDisposedException("SvnClientWrapper");
+                throw new ObjectDisposedException(GetType().FullName);
         }
 
         private void BeforeWriteOperation(string operationName)
@@ -565,15 +565,13 @@ namespace MyLoadTest.LoadRunnerSvnAddin
 
         public static bool IsInSourceControl(string fileName)
         {
-            if (Commands.RegisterEventsCommand.CanBeVersionControlledFile(fileName))
-            {
-                var status = OverlayIconManager.GetStatus(fileName);
-                return status != StatusKind.None && status != StatusKind.Unversioned && status != StatusKind.Ignored;
-            }
-            else
+            if (!LocalHelper.CanBeVersionControlledFile(fileName))
             {
                 return false;
             }
+
+            var status = OverlayIconManager.GetStatus(new FileInfo(fileName));
+            return status != StatusKind.None && status != StatusKind.Unversioned && status != StatusKind.Ignored;
         }
 
         private static StatusKind ToStatusKind(SvnStatus kind)

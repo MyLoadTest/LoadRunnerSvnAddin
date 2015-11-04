@@ -2,75 +2,60 @@
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 
 using System;
+using System.IO;
 using System.Linq;
 using ICSharpCode.Core;
 using ICSharpCode.SharpDevelop.Project;
-using MyLoadTest.LoadRunnerSvnAddin.Commands;
 using MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor;
 
 namespace MyLoadTest.LoadRunnerSvnAddin
 {
-    public class SubversionStateCondition : IConditionEvaluator
+    public sealed class SubversionStateCondition : IConditionEvaluator
     {
         public bool IsValid(object caller, Condition condition)
         {
-            var node = ProjectBrowserPad.Instance.SelectedNode as FileNode;
-            if (node != null)
+            if (condition == null)
             {
-                if (condition.Properties["item"] == "Folder")
+                return false;
+            }
+
+            var fileSystemInfo = ProjectBrowserPad.Instance?.SelectedNode?.GetNodeFileSystemInfo();
+            if (fileSystemInfo == null)
+            {
+                return false;
+            }
+
+            var itemProperty = condition.Properties["item"];
+            if (fileSystemInfo is FileInfo)
+            {
+                if (itemProperty == "Folder")
                 {
                     return false;
                 }
-                return Test(condition, node.FileName, false);
             }
-            var dir = ProjectBrowserPad.Instance.SelectedNode as DirectoryNode;
-            if (dir != null)
+            else if (fileSystemInfo is DirectoryInfo)
             {
-                if (condition.Properties["item"] == "File")
+                if (itemProperty == "File")
                 {
                     return false;
                 }
-                if (condition.Properties["state"].Contains("Modified"))
-                {
-                    // Directories are not checked recursively yet.
-                    return true;
-                }
-                return Test(condition, dir.Directory, true);
             }
-            var sol = ProjectBrowserPad.Instance.SelectedNode as SolutionNode;
-            if (sol != null)
-            {
-                if (condition.Properties["item"] == "File")
-                {
-                    return false;
-                }
-                if (condition.Properties["state"].Contains("Modified"))
-                {
-                    // Directories are not checked recursively yet.
-                    return true;
-                }
-                return Test(condition, sol.Solution.Directory, true);
-            }
-            return false;
+
+            return TestCondition(condition, fileSystemInfo);
         }
 
-        private static bool Test(Condition condition, string fileName, bool isDirectory)
+        private static bool TestCondition(Condition condition, FileSystemInfo fileSystemInfo)
         {
-            var allowedStatus = condition.Properties["state"].Split(';');
-            if (allowedStatus.Length == 0 || (allowedStatus.Length == 1 && allowedStatus[0].Length == 0))
+            var allowedStatuses = condition.Properties["state"].Split(';');
+            if (allowedStatuses.Length == 0 || (allowedStatuses.Length == 1 && allowedStatuses[0].Length == 0))
             {
                 return true;
             }
-            string status;
-            if (isDirectory ? RegisterEventsCommand.CanBeVersionControlledDirectory(fileName)
-                : RegisterEventsCommand.CanBeVersionControlledFile(fileName))
-            {
-                status = OverlayIconManager.GetStatus(fileName).ToString();
-            }
-            else
-            {
-                status = "Unversioned";
-            }
+
+            var status = fileSystemInfo.CanBeVersionControlledItem()
+                ? OverlayIconManager.GetStatus(fileSystemInfo)
+                : StatusKind.Unversioned;
+
             /*if (status == "Unversioned") {
                 PropertyDictionary pd = SvnClient.Instance.Client.PropGet("svn:ignore", Path.GetDirectoryName(fileName), Revision.Working, Recurse.None);
                 if (pd != null) {
@@ -90,7 +75,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin
             }*/
 
             //LoggingService.Debug("Status of " + fileName + " is " + status);
-            return Array.IndexOf(allowedStatus, status) >= 0;
+            return Array.IndexOf(allowedStatuses, status.ToString()) >= 0;
         }
     }
 }

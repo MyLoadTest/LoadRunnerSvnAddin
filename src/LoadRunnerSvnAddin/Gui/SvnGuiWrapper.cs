@@ -50,59 +50,59 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui
                 {
                     form.ShowDialog(WorkbenchSingleton.MainWin32Window);
                 }
+
+                return;
             }
-            else
+
+            try
             {
-                try
+                var arguments = new StringBuilder();
+                arguments.Append("/command:");
+                arguments.Append(command);
+                if (fileName != null)
                 {
-                    var arguments = new StringBuilder();
-                    arguments.Append("/command:");
-                    arguments.Append(command);
-                    if (fileName != null)
-                    {
-                        arguments.Append(" /notempfile ");
-                        arguments.Append(" /path:\"");
-                        arguments.Append(fileName);
-                        arguments.Append('"');
-                    }
-                    if (argument != null)
-                    {
-                        arguments.Append(' ');
-                        arguments.Append(argument);
-                    }
-
-                    var p = new Process
-                    {
-                        StartInfo =
-                        {
-                            FileName = path,
-                            Arguments = arguments.ToString(),
-                            UseShellExecute = false
-                            ////RedirectStandardError = true,
-                            ////RedirectStandardOutput = true
-                        },
-                        EnableRaisingEvents = true
-                    };
-
-                    p.Exited += delegate
-                    {
-                        p.Dispose();
-                        callback?.Invoke();
-                    };
-
-                    ////p.OutputDataReceived += delegate(object sender, DataReceivedEventArgs e) {
-                    ////	SvnClient.Instance.SvnCategory.AppendText(e.Data);
-                    ////};
-                    ////p.ErrorDataReceived += delegate(object sender, DataReceivedEventArgs e) {
-                    ////	SvnClient.Instance.SvnCategory.AppendText(e.Data);
-                    ////};
-                    
-                    p.Start();
+                    arguments.Append(" /notempfile ");
+                    arguments.Append(" /path:\"");
+                    arguments.Append(fileName);
+                    arguments.Append('"');
                 }
-                catch (Exception ex)
+                if (argument != null)
                 {
-                    MessageService.ShowError(ex.Message);
+                    arguments.Append(' ');
+                    arguments.Append(argument);
                 }
+
+                var p = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = path,
+                        Arguments = arguments.ToString(),
+                        UseShellExecute = false
+                        ////RedirectStandardError = true,
+                        ////RedirectStandardOutput = true
+                    },
+                    EnableRaisingEvents = true
+                };
+
+                p.Exited += delegate
+                {
+                    p.Dispose();
+                    callback?.Invoke();
+                };
+
+                ////p.OutputDataReceived += delegate(object sender, DataReceivedEventArgs e) {
+                ////	SvnClient.Instance.SvnCategory.AppendText(e.Data);
+                ////};
+                ////p.ErrorDataReceived += delegate(object sender, DataReceivedEventArgs e) {
+                ////	SvnClient.Instance.SvnCategory.AppendText(e.Data);
+                ////};
+
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageService.ShowError(ex.Message);
             }
         }
 

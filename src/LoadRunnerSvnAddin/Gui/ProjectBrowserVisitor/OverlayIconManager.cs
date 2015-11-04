@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using ICSharpCode.Core;
+using ICSharpCode.SharpDevelop.Gui;
 using ICSharpCode.SharpDevelop.Project;
 using MyLoadTest.LoadRunnerSvnAddin.Properties;
 
@@ -110,6 +112,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
         {
             if (_subversionDisabled)
                 return;
+
             lock (Queue)
             {
                 Queue.Enqueue(node);
@@ -186,8 +189,13 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
             }
         }
 
-        public static StatusKind GetStatus(string fileName)
+        public static StatusKind GetStatus(FileSystemInfo fileSystemInfo)
         {
+            if (fileSystemInfo == null)
+            {
+                throw new ArgumentNullException(nameof(fileSystemInfo));
+            }
+
             lock (ClientLock)
             {
                 if (_subversionDisabled)
@@ -204,9 +212,10 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
                     catch (Exception ex)
                     {
                         _subversionDisabled = true;
-                        ICSharpCode.SharpDevelop.Gui.WorkbenchSingleton.SafeThreadAsyncCall(
+
+                        WorkbenchSingleton.SafeThreadAsyncCall(
                             MessageService.ShowWarning,
-                            "Error initializing Subversion library:\n" + ex);
+                            $@"Error initializing Subversion library:{Environment.NewLine}{ex}");
 
                         return StatusKind.None;
                     }
@@ -214,11 +223,11 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
 
                 try
                 {
-                    return _client.SingleStatus(fileName).TextStatus;
+                    return _client.SingleStatus(fileSystemInfo.FullName).TextStatus;
                 }
                 catch (SvnClientException ex)
                 {
-                    LoggingService.Warn("Error getting status of " + fileName, ex);
+                    LoggingService.Warn($@"Error getting SVN status of ""{fileSystemInfo.FullName}"".", ex);
                     return StatusKind.None;
                 }
             }
@@ -227,40 +236,17 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
         private static void RunStep(AbstractProjectBrowserTreeNode node)
         {
             if (node.IsDisposed)
+            {
                 return;
-
-            var fileNode = node as FileNode;
-            StatusKind status;
-            if (fileNode != null)
-            {
-                status = GetStatus(fileNode.FileName);
-            }
-            else
-            {
-                var directoryNode = node as DirectoryNode;
-                if (directoryNode != null)
-                {
-                    status = GetStatus(directoryNode.Directory);
-                }
-                else
-                {
-                    var solNode = node as SolutionNode;
-                    if (solNode != null)
-                    {
-                        status = GetStatus(solNode.Solution.Directory);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
             }
 
-            ICSharpCode.SharpDevelop.Gui.WorkbenchSingleton.SafeThreadAsyncCall(
-                delegate
-                {
-                    node.Overlay = GetImage(status);
-                });
+            var statusKind = node.GetNodeStatus();
+            if (!statusKind.HasValue)
+            {
+                return;
+            }
+
+            WorkbenchSingleton.SafeThreadAsyncCall(() => node.Overlay = GetImage(statusKind.Value));
         }
     }
 }

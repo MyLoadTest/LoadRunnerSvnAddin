@@ -34,35 +34,11 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 
         private static void TreeNodeCreated(object sender, TreeViewEventArgs e)
         {
-            var sn = e.Node as SolutionNode;
-            if (sn != null)
+            var projectBrowserTreeNode = e.Node as AbstractProjectBrowserTreeNode;
+            var fileSystemInfo = projectBrowserTreeNode?.GetNodeFileSystemInfo();
+            if (fileSystemInfo.CanBeVersionControlledItem())
             {
-                if (CanBeVersionControlledDirectory(sn.Solution.Directory))
-                {
-                    OverlayIconManager.Enqueue(sn);
-                }
-            }
-            else
-            {
-                var dn = e.Node as DirectoryNode;
-                if (dn != null)
-                {
-                    if (CanBeVersionControlledDirectory(dn.Directory))
-                    {
-                        OverlayIconManager.Enqueue(dn);
-                    }
-                }
-                else
-                {
-                    var fn = e.Node as FileNode;
-                    if (fn != null)
-                    {
-                        if (CanBeVersionControlledFile(fn.FileName))
-                        {
-                            OverlayIconManager.Enqueue(fn);
-                        }
-                    }
-                }
+                OverlayIconManager.Enqueue(projectBrowserTreeNode);
             }
         }
 
@@ -73,7 +49,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             var solutionFileName = e.Solution.FileName;
             var solutionDirectory = e.Solution.Directory;
 
-            if (!CanBeVersionControlledFile(solutionDirectory))
+            if (!LocalHelper.CanBeVersionControlledFile(solutionDirectory))
                 return;
 
             try
@@ -113,7 +89,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
         {
             if (!AddInOptions.AutomaticallyAddFiles)
                 return;
-            if (!CanBeVersionControlledFile(e.Project.Directory))
+            if (!LocalHelper.CanBeVersionControlledFile(e.Project.Directory))
                 return;
 
             var projectDir = Path.GetFullPath(e.Project.Directory);
@@ -165,7 +141,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 
         private static void AddFileWithParentDirectoriesToSvn(SvnClientWrapper client, string fileName)
         {
-            if (!CanBeVersionControlledFile(fileName))
+            if (!LocalHelper.CanBeVersionControlledFile(fileName))
             {
                 AddFileWithParentDirectoriesToSvn(client, FileUtility.GetAbsolutePath(fileName, ".."));
             }
@@ -175,23 +151,12 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             client.Add(fileName, Recurse.None);
         }
 
-        internal static bool CanBeVersionControlledFile(string fileName)
-        {
-            return CanBeVersionControlledDirectory(Path.GetDirectoryName(fileName));
-        }
-
-        internal static bool CanBeVersionControlledDirectory(string directory)
-        {
-            if (OverlayIconManager.SubversionDisabled)
-                return false;
-            return Directory.Exists(Path.Combine(directory, ".svn")) || Directory.Exists(Path.Combine(directory, "_svn"));
-        }
-
         private static void FileSaved(object sender, FileNameEventArgs e)
         {
             string fileName = e.FileName;
-            if (!CanBeVersionControlledFile(fileName))
+            if (!LocalHelper.CanBeVersionControlledFile(fileName))
                 return;
+
             ClearStatusCacheAndEnqueueFile(fileName);
         }
 
@@ -214,7 +179,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
                 return;
 
             var fullName = Path.GetFullPath(e.FileName);
-            if (!CanBeVersionControlledFile(fullName))
+            if (!LocalHelper.CanBeVersionControlledFile(fullName))
                 return;
             try
             {
@@ -246,7 +211,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             if (e.Cancel)
                 return;
             var fullName = Path.GetFullPath(e.FileName);
-            if (!CanBeVersionControlledFile(fullName))
+            if (!LocalHelper.CanBeVersionControlledFile(fullName))
                 return;
 
             if (e.IsDirectory)
@@ -388,10 +353,10 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             if (!AddInOptions.AutomaticallyRenameFiles)
                 return;
             var fullSource = Path.GetFullPath(e.SourceFile);
-            if (!CanBeVersionControlledFile(fullSource))
+            if (!LocalHelper.CanBeVersionControlledFile(fullSource))
                 return;
             var fullTarget = Path.GetFullPath(e.TargetFile);
-            if (!CanBeVersionControlledFile(fullTarget))
+            if (!LocalHelper.CanBeVersionControlledFile(fullTarget))
                 return;
             try
             {
@@ -435,7 +400,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             if (!AddInOptions.AutomaticallyRenameFiles)
                 return;
             var fullSource = Path.GetFullPath(e.SourceFile);
-            if (!CanBeVersionControlledFile(fullSource))
+            if (!LocalHelper.CanBeVersionControlledFile(fullSource))
                 return;
             try
             {

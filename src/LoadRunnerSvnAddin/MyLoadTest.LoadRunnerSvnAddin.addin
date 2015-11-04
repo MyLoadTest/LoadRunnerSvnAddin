@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<AddIn name="Subversion Add-in for VuGen">
-    <!--author="Daniel Grunwald"
-    copyright="prj:///doc/copyright.txt"
+<AddIn xmlns="http://www.icsharpcode.net/2005/addin"
+        name="Subversion Add-in for VuGen"
+        author="Daniel Grunwald and Vitalii Maklai">
+    <!--copyright="prj:///doc/copyright.txt"
     description="Adds support for Subversion to the project browser"
     addInManagerHidden="preinstalled">-->
 
@@ -178,7 +179,19 @@
         <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
     </Path>
 
+    <Path name="/Vugen/Framework/ProjectSystem/VugenProjectNode">
+        <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
+    </Path>
+
     <Path name="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/FolderNode">
+        <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
+    </Path>
+
+    <Path name="/Vugen/Framework/ProjectSystem/VuGenActionGroupTreeNode">
+        <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
+    </Path>
+
+    <Path name="/Vugen/Framework/ProjectSystem/VuGenExtraFilesTreeNode">
         <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
     </Path>
 
@@ -186,6 +199,14 @@
         <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
     </Path>
 
+    <Path name="/Vugen/Framework/ProjectSystem/VuGenActionTreeNode">
+        <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
+    </Path>
+
+    <Path name="/Vugen/Framework/ProjectSystem/VuGenExtraFileTreeNode">
+        <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
+    </Path>
+    
     <Path name="/SharpDevelop/Dialogs/OptionsDialog/ToolsOptions">
         <OptionPanel id="SubversionOptionsPanel"
                 label="${res:AddIns.Subversion.Options.Title}"

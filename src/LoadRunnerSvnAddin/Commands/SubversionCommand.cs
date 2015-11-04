@@ -17,65 +17,42 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
     {
         public override void Run()
         {
-            var node = ProjectBrowserPad.Instance.SelectedNode;
-            if (node != null)
-            {
-                string nodeFileName = null;
-                if (node is DirectoryNode)
-                {
-                    nodeFileName = ((DirectoryNode)node).Directory;
-                }
-                else if (node is FileNode)
-                {
-                    nodeFileName = ((FileNode)node).FileName;
-                }
-                else if (node is SolutionNode)
-                {
-                    nodeFileName = ((SolutionNode)node).Solution.Directory;
-                }
-                if (nodeFileName != null)
-                {
-                    var unsavedFiles = new List<OpenedFile>();
-                    foreach (var file in FileService.OpenedFiles)
-                    {
-                        if (file.IsDirty && !file.IsUntitled)
-                        {
-                            if (string.IsNullOrEmpty(file.FileName))
-                                continue;
-                            if (FileUtility.IsUrl(file.FileName))
-                                continue;
-                            if (FileUtility.IsBaseDirectory(nodeFileName, file.FileName))
-                            {
-                                unsavedFiles.Add(file);
-                            }
-                        }
-                    }
-                    if (unsavedFiles.Count > 0)
-                    {
-                        if (MessageService.ShowCustomDialog(
-                            MessageService.DefaultMessageBoxTitle,
-                            "${res:AddIns.Subversion.SVNRequiresSavingFiles}",
-                            0, 1,
-                            "${res:AddIns.Subversion.SaveFiles}", "${res:Global.CancelButtonText}")
-                            == 0)
-                        {
-                            // Save
-                            foreach (var file in unsavedFiles)
-                            {
-                                ICSharpCode.SharpDevelop.Commands.SaveFile.Save(file);
-                            }
-                        }
-                        else
-                        {
-                            // Cancel
-                            return;
-                        }
-                    }
+            var node = ProjectBrowserPad.Instance?.SelectedNode;
 
-                    // now run the actual operation:
-                    Run(nodeFileName);
+            var fileSystemInfo = node?.GetNodeFileSystemInfo();
+            if (fileSystemInfo == null)
+            {
+                return;
+            }
+
+            var unsavedFiles = FileService.OpenedFiles
+                .Where(
+                    file =>
+                        file.IsDirty && !file.IsUntitled && !string.IsNullOrEmpty(file.FileName)
+                            && !FileUtility.IsUrl(file.FileName)
+                            && FileUtility.IsBaseDirectory(fileSystemInfo.FullName, file.FileName))
+                .ToArray();
+
+            if (unsavedFiles.Length != 0)
+            {
+                if (MessageService.ShowCustomDialog(
+                    MessageService.DefaultMessageBoxTitle,
+                    "${res:AddIns.Subversion.SVNRequiresSavingFiles}",
+                    0,
+                    1,
+                    "${res:AddIns.Subversion.SaveFiles}",
+                    "${res:Global.CancelButtonText}") != 0)
+                {
+                    return;
+                }
+
+                foreach (var file in unsavedFiles)
+                {
+                    ICSharpCode.SharpDevelop.Commands.SaveFile.Save(file);
                 }
             }
+
+            Run(fileSystemInfo.FullName);
         }
 
         protected ProjectWatcher WatchProjects()
@@ -83,17 +60,18 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             return new ProjectWatcher(ProjectService.OpenSolution);
         }
 
-        private static void CallbackInvoked()
+        protected abstract void Run(string filename);
+
+        private static void OnCallbackInvoked()
         {
             OverlayIconManager.ClearStatusCache();
-            var node = ProjectBrowserPad.Instance.SelectedNode;
+
+            var node = ProjectBrowserPad.Instance?.SelectedNode;
             if (node != null)
             {
                 OverlayIconManager.EnqueueRecursive(node);
             }
         }
-
-        protected abstract void Run(string filename);
 
         private struct ProjectEntry
         {
@@ -146,7 +124,8 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 
             internal ProjectWatcher(Solution solution)
             {
-                this._solution = solution;
+                _solution = solution;
+
                 if (AddInOptions.AutomaticallyReloadProject && solution != null)
                 {
                     _list.Add(new ProjectEntry(new FileInfo(solution.FileName)));
@@ -164,18 +143,23 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 
             private void CallbackInvoked()
             {
-                SubversionCommand.CallbackInvoked();
+                OnCallbackInvoked();
+
                 if (ProjectService.OpenSolution != _solution)
+                {
                     return;
+                }
+
                 if (!_list.TrueForAll(projectEntry => !projectEntry.HasFileChanged()))
                 {
                     // if at least one project was changed:
                     if (MessageService.ShowCustomDialog(
                         MessageService.DefaultMessageBoxTitle,
                         "${res:ICSharpCode.SharpDevelop.Project.SolutionAlteredExternallyMessage}",
-                        0, 1,
-                        "${res:ICSharpCode.SharpDevelop.Project.ReloadSolution}", "${res:ICSharpCode.SharpDevelop.Project.KeepOldSolution}")
-                        == 0)
+                        0,
+                        1,
+                        "${res:ICSharpCode.SharpDevelop.Project.ReloadSolution}",
+                        "${res:ICSharpCode.SharpDevelop.Project.KeepOldSolution}") == 0)
                     {
                         ProjectService.LoadSolution(_solution.FileName);
                     }

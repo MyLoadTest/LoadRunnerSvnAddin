@@ -39,6 +39,22 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HP.LR.VuGen.ProjectSystem">
+      <HintPath>..\..\lib\VuGen\HP.LR.VuGen.ProjectSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HP.LR.VuGen.ServiceCore">
+      <HintPath>..\..\lib\VuGen\HP.LR.VuGen.ServiceCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HP.LR.VuGen.VuGenProjectBinding">
+      <HintPath>..\..\lib\VuGen\HP.LR.VuGen.VuGenProjectBinding.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HP.Utt.ProjectSystem">
+      <HintPath>..\..\lib\VuGen\HP.Utt.ProjectSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="ICSharpCode.Core">
       <HintPath>..\..\lib\SharpDevelop\ICSharpCode.Core.dll</HintPath>
       <Private>False</Private>
@@ -112,6 +128,7 @@
     </Compile>
     <Compile Include="AddInOptions.cs" />
     <Compile Include="KnownError.cs" />
+    <Compile Include="LocalHelper.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="NotificationEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
