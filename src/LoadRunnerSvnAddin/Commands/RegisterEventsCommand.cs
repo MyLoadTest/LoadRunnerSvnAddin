@@ -402,6 +402,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             var fullSource = Path.GetFullPath(e.SourceFile);
             if (!LocalHelper.CanBeVersionControlledFile(fullSource))
                 return;
+
             try
             {
                 using (var client = new SvnClientWrapper())

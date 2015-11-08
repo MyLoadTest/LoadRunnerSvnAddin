@@ -15,7 +15,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin
 			if (!SvnClientWrapper.IsInSourceControl(fileName))
 				return null;
 			
-			using (SvnClientWrapper client = new SvnClientWrapper())
+			using (var client = new SvnClientWrapper())
 				return client.OpenBaseVersion(fileName);
 		}
 		

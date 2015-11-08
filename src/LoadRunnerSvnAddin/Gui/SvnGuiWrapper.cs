@@ -36,12 +36,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui
                 ?? GetPathFromRegistry(RegistryHive.LocalMachine, valueName);
         }
 
-        private static void Proc(string command, string fileName, MethodInvoker callback)
-        {
-            Proc(command, fileName, callback, null);
-        }
-
-        private static void Proc(string command, string fileName, MethodInvoker callback, string argument)
+        private static void Proc(string command, string fileName, MethodInvoker callback, string argument = null)
         {
             var path = GetPathFromRegistry("ProcPath");
             if (path == null)
