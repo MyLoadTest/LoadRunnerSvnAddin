@@ -205,8 +205,9 @@ if exist "%25ADDIN_TARGET_PATH%25" (
 
 @echo * Copying the add-in to target directory "%25ADDIN_TARGET_PATH%25".
 xcopy /f /g /h /r /y "$(TargetDir)\MyLoadTest.*" "%25ADDIN_TARGET_PATH%25\" || @exit 2
-xcopy /f /g /h /r /y "$(TargetDir)\SharpSvn*.dll" "%25ADDIN_TARGET_PATH%25\" || @exit 3
-xcopy /f /g /h /r /y "$(TargetDir)\SharpPlink-Win32.svnExe" "%25ADDIN_TARGET_PATH%25\" || @exit 4
+xcopy /f /g /h /r /y "$(ProjectDir)\..\..\lib\SharpSvn\Sharp*.dll" "%25ADDIN_TARGET_PATH%25\" || @exit 3
+xcopy /f /g /h /r /y "$(ProjectDir)\..\..\lib\SharpSvn\Sharp*.svnDll" "%25ADDIN_TARGET_PATH%25\" || @exit 4
+xcopy /f /g /h /r /y "$(ProjectDir)\..\..\lib\SharpSvn\Sharp*.svnExe" "%25ADDIN_TARGET_PATH%25\" || @exit 5
 @echo * Copying the add-in to target directory - DONE.
 @echo.
 

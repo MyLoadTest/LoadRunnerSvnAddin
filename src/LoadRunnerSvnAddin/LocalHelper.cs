@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using HP.LR.Vugen.BackEnd.Project.ProjectSystem.ScriptItems;
 using HP.Utt.ProjectSystem;
 using ICSharpCode.SharpDevelop.Gui;
@@ -76,8 +75,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin
                 throw new ArgumentNullException(nameof(filePath));
             }
 
-            return !OverlayIconManager.SubversionDisabled
-                && CanBeVersionControlledDirectory(Path.GetDirectoryName(filePath));
+            return CanBeVersionControlledDirectory(Path.GetDirectoryName(filePath));
         }
 
         public static bool CanBeVersionControlledDirectory(string directoryPath)
@@ -87,18 +85,45 @@ namespace MyLoadTest.LoadRunnerSvnAddin
                 throw new ArgumentNullException(nameof(directoryPath));
             }
 
-            if (OverlayIconManager.SubversionDisabled)
-            {
-                return false;
-            }
-
-            return Directory.Exists(Path.Combine(directoryPath, ".svn"))
-                || Directory.Exists(Path.Combine(directoryPath, "_svn"));
+            return FindWorkingCopyRoot(directoryPath) != null;
         }
 
         #endregion
 
         #region Private Methods
+
+        private static DirectoryInfo FindWorkingCopyRoot(string directoryPath)
+        {
+            if (OverlayIconManager.SubversionDisabled)
+            {
+                return null;
+            }
+
+            try
+            {
+                if (!Path.IsPathRooted(directoryPath))
+                {
+                    return null;
+                }
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+
+            var info = new DirectoryInfo(directoryPath);
+            while (info != null)
+            {
+                if (Directory.Exists(Path.Combine(info.FullName, ".svn")))
+                {
+                    return info;
+                }
+
+                info = info.Parent;
+            }
+
+            return null;
+        }
 
         private static FileInfo ToFileInfo(this string filePath)
         {

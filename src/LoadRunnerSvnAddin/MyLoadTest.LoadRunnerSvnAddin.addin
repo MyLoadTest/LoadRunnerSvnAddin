@@ -41,8 +41,6 @@
 
     <Path name="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem">
         <Condition name="SubversionIsControlled">
-            <MenuItem id="SvnSeparator" type="Separator" />
-
             <Condition name="SubversionState" state="Modified;Added;Replaced">
                 <MenuItem id="SvnCommit"
                         label="${res:AddIns.Subversion.Commit}..."
@@ -67,6 +65,8 @@
                         label="${res:AddIns.Subversion.Revert}"
                         icon="Icons.16x16.UndoIcon"
                         class="MyLoadTest.LoadRunnerSvnAddin.Commands.RevertCommand" />
+
+                <MenuItem id="SvnSeparator1" type="Separator" />
             </Condition>
 
             <MenuItem id="SvnMenu" type="Menu" label="Subversion">
@@ -168,6 +168,8 @@
                         label="${res:ComponentInspector.AboutDialog.Title}"
                         class="MyLoadTest.LoadRunnerSvnAddin.Commands.AboutCommand" />
             </MenuItem>
+
+            <MenuItem id="SvnSeparator2" type="Separator" />
         </Condition>
     </Path>
 
