@@ -17,9 +17,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
     {
         public override void Run()
         {
-            var node = ProjectBrowserPad.Instance?.SelectedNode;
-
-            var fileSystemInfo = node?.GetNodeFileSystemInfo();
+            var fileSystemInfo = GetSelectedNodeFileSystemInfo();
             if (fileSystemInfo == null)
             {
                 return;
@@ -60,7 +58,15 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             return new ProjectWatcher(ProjectService.OpenSolution);
         }
 
-        protected abstract void Run(string filename);
+        protected virtual FileSystemInfo GetSelectedNodeFileSystemInfo()
+        {
+            var selectedNode = ProjectBrowserPad.Instance?.SelectedNode;
+
+            var result = selectedNode?.GetNodeFileSystemInfo();
+            return result;
+        }
+
+        protected abstract void Run(string fileName);
 
         private static void OnCallbackInvoked()
         {

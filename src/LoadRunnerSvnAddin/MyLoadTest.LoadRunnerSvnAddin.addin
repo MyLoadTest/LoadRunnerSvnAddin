@@ -19,6 +19,8 @@
             <ConditionEvaluator name="SubversionState" class="MyLoadTest.LoadRunnerSvnAddin.SubversionStateCondition" />
             <ConditionEvaluator name="SubversionIsControlled"
                     class="MyLoadTest.LoadRunnerSvnAddin.SubversionIsControlledCondition" />
+            <ConditionEvaluator name="SubversionWorkingCopyModifiedCondition"
+                    class="MyLoadTest.LoadRunnerSvnAddin.SubversionWorkingCopyModifiedCondition" />
         </Import>
     </Runtime>
 
@@ -46,6 +48,12 @@
                         label="${res:AddIns.Subversion.Commit}..."
                         icon="Svn.Commit"
                         class="MyLoadTest.LoadRunnerSvnAddin.Commands.CommitCommand" />
+            </Condition>
+            <Condition name="SubversionWorkingCopyModifiedCondition">
+                <MenuItem id="SvnCommitWorkingCopy"
+                        label="Commit All..."
+                        icon="Svn.CommitWorkingCopy"
+                        class="MyLoadTest.LoadRunnerSvnAddin.Commands.CommitWorkingCopyCommand" />
             </Condition>
             <Condition name="SubversionState" state="Modified;Conflicted;Added;Replaced">
                 <Condition name="SubversionState" state="Modified" item="File">
@@ -208,7 +216,7 @@
     <Path name="/Vugen/Framework/ProjectSystem/VuGenExtraFileTreeNode">
         <Include id="SubversionInclude" path="/SharpDevelop/Pads/ProjectBrowser/ContextMenu/SubversionItem" />
     </Path>
-    
+
     <Path name="/SharpDevelop/Dialogs/OptionsDialog/ToolsOptions">
         <OptionPanel id="SubversionOptionsPanel"
                 label="${res:AddIns.Subversion.Options.Title}"

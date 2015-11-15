@@ -53,19 +53,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin
 
         public static bool CanBeVersionControlledItem(this FileSystemInfo fileSystemInfo)
         {
-            var fileInfo = fileSystemInfo as FileInfo;
-            if (fileInfo != null)
-            {
-                return CanBeVersionControlledFile(fileInfo.FullName);
-            }
-
-            var directoryInfo = fileSystemInfo as DirectoryInfo;
-            if (directoryInfo != null)
-            {
-                return CanBeVersionControlledDirectory(directoryInfo.FullName);
-            }
-
-            return false;
+            return GetWorkingCopyRoot(fileSystemInfo) != null;
         }
 
         public static bool CanBeVersionControlledFile(string filePath)
@@ -85,14 +73,31 @@ namespace MyLoadTest.LoadRunnerSvnAddin
                 throw new ArgumentNullException(nameof(directoryPath));
             }
 
-            return FindWorkingCopyRoot(directoryPath) != null;
+            return GetWorkingCopyRoot(directoryPath) != null;
+        }
+
+        public static DirectoryInfo GetWorkingCopyRoot(this FileSystemInfo fileSystemInfo)
+        {
+            var fileInfo = fileSystemInfo as FileInfo;
+            if (fileInfo != null)
+            {
+                return GetWorkingCopyRoot(Path.GetDirectoryName(fileInfo.FullName));
+            }
+
+            var directoryInfo = fileSystemInfo as DirectoryInfo;
+            if (directoryInfo != null)
+            {
+                return GetWorkingCopyRoot(directoryInfo.FullName);
+            }
+
+            return null;
         }
 
         #endregion
 
         #region Private Methods
 
-        private static DirectoryInfo FindWorkingCopyRoot(string directoryPath)
+        private static DirectoryInfo GetWorkingCopyRoot(string directoryPath)
         {
             if (OverlayIconManager.SubversionDisabled)
             {

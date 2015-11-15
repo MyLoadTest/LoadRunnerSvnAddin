@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class BlameCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Blame(filename, null);
+            SvnGuiWrapper.Blame(fileName, null);
         }
     }
 }

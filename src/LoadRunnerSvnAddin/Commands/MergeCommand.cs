@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class MergeCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Merge(filename, WatchProjects().Callback);
+            SvnGuiWrapper.Merge(fileName, WatchProjects().Callback);
         }
     }
 }

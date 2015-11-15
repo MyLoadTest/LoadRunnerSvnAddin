@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class RevertCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Revert(filename, WatchProjects().Callback);
+            SvnGuiWrapper.Revert(fileName, WatchProjects().Callback);
         }
     }
 }

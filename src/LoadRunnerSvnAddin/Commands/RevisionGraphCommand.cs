@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class RevisionGraphCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.RevisionGraph(filename, null);
+            SvnGuiWrapper.RevisionGraph(fileName, null);
         }
     }
 }

@@ -31,6 +31,8 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
 
         [SuppressMessage("ReSharper", "UnusedMember.Local",
             Justification = "Left as is from original SharpDevelop Svn Add-in")]
+        [SuppressMessage("ReSharper", "InconsistentNaming",
+            Justification = "Left as is from original SharpDevelop Svn Add-in")]
         private enum StatusIcon
         {
             Empty = 0,
@@ -158,6 +160,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
                     // This prevents the disk from seeking too much
                     Thread.Sleep(100);
                 }
+
                 AbstractProjectBrowserTreeNode node;
                 lock (Queue)
                 {
@@ -170,6 +173,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor
                     }
                     node = Queue.Dequeue();
                 }
+
                 try
                 {
                     RunStep(node);

@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class CommitCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Commit(filename, WatchProjects().Callback);
+            SvnGuiWrapper.Commit(fileName, WatchProjects().Callback);
         }
     }
 }

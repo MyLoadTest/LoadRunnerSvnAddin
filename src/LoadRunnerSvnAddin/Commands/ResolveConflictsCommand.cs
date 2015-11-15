@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class ResolveConflictsCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.ResolveConflict(filename, WatchProjects().Callback);
+            SvnGuiWrapper.ResolveConflict(fileName, WatchProjects().Callback);
         }
     }
 }

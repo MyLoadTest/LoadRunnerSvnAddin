@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class ApplyPatchCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.ApplyPatch(filename, WatchProjects().Callback);
+            SvnGuiWrapper.ApplyPatch(fileName, WatchProjects().Callback);
         }
     }
 }

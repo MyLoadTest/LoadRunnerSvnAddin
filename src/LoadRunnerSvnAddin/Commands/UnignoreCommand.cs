@@ -8,15 +8,15 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class UnignoreCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
             using (var client = new SvnClientWrapper())
             {
-                var propertyValue = client.GetPropertyValue(Path.GetDirectoryName(filename), "svn:ignore");
+                var propertyValue = client.GetPropertyValue(Path.GetDirectoryName(fileName), "svn:ignore");
                 if (propertyValue != null)
                 {
                     var watcher = WatchProjects();
-                    var shortFileName = Path.GetFileName(filename);
+                    var shortFileName = Path.GetFileName(fileName);
                     var b = new StringBuilder();
                     using (var r = new StringReader(propertyValue))
                     {
@@ -29,7 +29,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
                             }
                         }
                     }
-                    client.SetPropertyValue(Path.GetDirectoryName(filename), "svn:ignore", b.ToString());
+                    client.SetPropertyValue(Path.GetDirectoryName(fileName), "svn:ignore", b.ToString());
                     MessageService.ShowMessageFormatted("${res:AddIns.Subversion.ItemRemovedFromIgnoreList}", shortFileName);
                     watcher.Callback();
                 }

@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class RepoStatusCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.RepoStatus(filename, null);
+            SvnGuiWrapper.RepoStatus(fileName, null);
         }
     }
 }

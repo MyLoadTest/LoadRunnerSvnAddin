@@ -49,7 +49,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
             var solutionFileName = e.Solution.FileName;
             var solutionDirectory = e.Solution.Directory;
 
-            if (!LocalHelper.CanBeVersionControlledFile(solutionDirectory))
+            if (!LocalHelper.CanBeVersionControlledDirectory(solutionDirectory))
                 return;
 
             try
@@ -70,6 +70,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
                         client.AddToIgnoreList(solutionDirectory, Path.GetFileName(solutionFileName) + ".cache");
                     }
                 }
+
                 foreach (var p in e.Solution.Projects)
                 {
                     ProjectCreated(null, new ProjectEventArgs(p));
@@ -89,7 +90,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
         {
             if (!AddInOptions.AutomaticallyAddFiles)
                 return;
-            if (!LocalHelper.CanBeVersionControlledFile(e.Project.Directory))
+            if (!LocalHelper.CanBeVersionControlledDirectory(e.Project.Directory))
                 return;
 
             var projectDir = Path.GetFullPath(e.Project.Directory);

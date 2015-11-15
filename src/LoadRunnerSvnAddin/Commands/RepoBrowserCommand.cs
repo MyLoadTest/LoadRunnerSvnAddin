@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class RepoBrowserCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.RepoBrowser(filename, null);
+            SvnGuiWrapper.RepoBrowser(fileName, null);
         }
     }
 }

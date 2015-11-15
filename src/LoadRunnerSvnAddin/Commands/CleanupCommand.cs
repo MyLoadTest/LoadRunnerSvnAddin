@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class CleanupCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Cleanup(filename, null);
+            SvnGuiWrapper.Cleanup(fileName, null);
         }
     }
 }

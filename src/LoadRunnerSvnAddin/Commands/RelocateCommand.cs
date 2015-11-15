@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class RelocateCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Relocate(filename, WatchProjects().Callback);
+            SvnGuiWrapper.Relocate(fileName, WatchProjects().Callback);
         }
     }
 }

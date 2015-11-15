@@ -6,9 +6,9 @@ namespace MyLoadTest.LoadRunnerSvnAddin.Commands
 {
     public class ExportWorkingCopyCommand : SubversionCommand
     {
-        protected override void Run(string filename)
+        protected override void Run(string fileName)
         {
-            SvnGuiWrapper.Export(filename, null);
+            SvnGuiWrapper.Export(fileName, null);
         }
     }
 }
