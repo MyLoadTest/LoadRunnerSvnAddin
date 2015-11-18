@@ -2,15 +2,18 @@
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ICSharpCode.Core;
 using ICSharpCode.SharpDevelop.Project;
-using MyLoadTest.LoadRunnerSvnAddin.Gui.ProjectBrowserVisitor;
 
 namespace MyLoadTest.LoadRunnerSvnAddin
 {
     public sealed class SubversionWorkingCopyModifiedCondition : IConditionEvaluator
     {
+        private static readonly HashSet<StatusKind> Modified =
+            new HashSet<StatusKind>(new[] { StatusKind.Added, StatusKind.Modified, StatusKind.Replaced });
+
         public bool IsValid(object caller, Condition condition)
         {
             if (condition == null)
@@ -27,11 +30,12 @@ namespace MyLoadTest.LoadRunnerSvnAddin
                 return false;
             }
 
-            var statusKind = OverlayIconManager.GetStatus(fileSystemInfo);
-
-            return statusKind == StatusKind.Added
-                || statusKind == StatusKind.Modified
-                || statusKind == StatusKind.Replaced;
+            using (var client = new SvnClientWrapper())
+            {
+                var multiStatus = client.MultiStatus(workingCopyRoot);
+                var result = multiStatus.Any(pair => Modified.Contains(pair.Value.TextStatus));
+                return result;
+            }
         }
     }
 }

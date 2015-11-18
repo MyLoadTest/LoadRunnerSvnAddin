@@ -78,6 +78,12 @@
             </Condition>
 
             <MenuItem id="SvnMenu" type="Menu" label="Subversion">
+                <MenuItem id="SvnRefreshAllStatus"
+                    label="Refresh Status"
+                    class="MyLoadTest.LoadRunnerSvnAddin.Commands.RefreshAllStatusCommand" />
+                
+                <MenuItem id="Sep5" type="Separator" />
+
                 <ComplexCondition>
                     <Not>
                         <Condition name="SubversionState" state="Unversioned;Ignored" />

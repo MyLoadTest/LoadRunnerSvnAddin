@@ -3,12 +3,29 @@ using System.Linq;
 
 namespace MyLoadTest.LoadRunnerSvnAddin
 {
-    public class Status
+    public sealed class Status
     {
+        public static readonly Status None = new Status(StatusKind.None, false);
+
+        public Status(StatusKind textStatus, bool copied)
+        {
+            TextStatus = textStatus;
+            Copied = copied;
+        }
+
         public bool Copied
-        { get; set; }
+        {
+            get;
+        }
 
         public StatusKind TextStatus
-        { get; set; }
+        {
+            get;
+        }
+
+        public override string ToString()
+        {
+            return $@"{{ {TextStatus}{(Copied ? " (Copied)" : string.Empty)} }}";
+        }
     }
 }

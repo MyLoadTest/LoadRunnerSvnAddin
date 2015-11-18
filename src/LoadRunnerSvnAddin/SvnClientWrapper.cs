@@ -243,16 +243,18 @@ namespace MyLoadTest.LoadRunnerSvnAddin
             _statusCache.Clear();
         }
 
-        public Status SingleStatus(string filename)
+        public Status SingleStatus(string fileName)
         {
-            filename = FileUtility.NormalizePath(filename);
+            fileName = FileUtility.NormalizePath(fileName);
+
             Status result;
-            if (_statusCache.TryGetValue(filename, out result))
+            if (_statusCache.TryGetValue(fileName, out result))
             {
-                Debug("SVN: SingleStatus(" + filename + ") = cached " + result.TextStatus);
+                Debug("SVN: SingleStatus(" + fileName + ") = cached " + result.TextStatus);
                 return result;
             }
-            Debug("SVN: SingleStatus(" + filename + ")");
+
+            Debug("SVN: SingleStatus(" + fileName + ")");
             BeforeReadOperation("stat");
             try
             {
@@ -263,27 +265,68 @@ namespace MyLoadTest.LoadRunnerSvnAddin
                     RetrieveIgnoredEntries = true,
                     Depth = SvnDepth.Empty
                 };
+
                 _client.Status(
-                    filename, args,
+                    fileName,
+                    args,
                     delegate (object sender, SvnStatusEventArgs e)
                     {
-                        Debug("SVN: SingleStatus.callback(" + e.FullPath + "," + e.LocalContentStatus + ")");
-                        System.Diagnostics.Debug.Assert(filename.Equals(e.FullPath, StringComparison.OrdinalIgnoreCase));
-                        result = new Status
-                        {
-                            Copied = e.LocalCopied,
-                            TextStatus = ToStatusKind(e.LocalContentStatus)
-                        };
-                    }
-                );
+                        Debug("SVN: SingleStatus.callback(" + e.FullPath + ", " + e.LocalContentStatus + ")");
+                        System.Diagnostics.Debug.Assert(
+                            fileName.Equals(e.FullPath, StringComparison.OrdinalIgnoreCase));
+                        result = new Status(ToStatusKind(e.LocalContentStatus), e.LocalCopied);
+                    });
+
                 if (result == null)
                 {
-                    result = new Status
-                    {
-                        TextStatus = StatusKind.None
-                    };
+                    result = Status.None;
                 }
-                _statusCache.Add(filename, result);
+
+                _statusCache.Add(fileName, result);
+                return result;
+            }
+            catch (SvnException ex)
+            {
+                throw new SvnClientException(ex);
+            }
+            finally
+            {
+                AfterOperation();
+            }
+        }
+
+        public Dictionary<string, Status> MultiStatus(DirectoryInfo directoryInfo)
+        {
+            if (directoryInfo == null)
+            {
+                throw new ArgumentNullException(nameof(directoryInfo));
+            }
+
+            var result = new Dictionary<string, Status>();
+
+            Debug($@"SVN: {nameof(MultiStatus)}({directoryInfo.FullName})");
+            BeforeReadOperation("stat");
+            try
+            {
+                var args = new SvnStatusArgs
+                {
+                    Revision = SvnRevision.Working,
+                    RetrieveAllEntries = true,
+                    RetrieveIgnoredEntries = true,
+                    Depth = SvnDepth.Infinity
+                };
+
+                _client.Status(
+                    directoryInfo.FullName,
+                    args,
+                    (sender, e) =>
+                    {
+                        Debug($@"SVN: {nameof(MultiStatus)}.callback('{e.FullPath}', {e.LocalContentStatus})");
+
+                        var status = new Status(ToStatusKind(e.LocalContentStatus), e.LocalCopied);
+                        result.Add(e.FullPath, status);
+                    });
+
                 return result;
             }
             catch (SvnException ex)
@@ -298,10 +341,7 @@ namespace MyLoadTest.LoadRunnerSvnAddin
 
         private static SvnDepth ConvertDepth(Recurse recurse)
         {
-            if (recurse == Recurse.Full)
-                return SvnDepth.Infinity;
-            else
-                return SvnDepth.Empty;
+            return recurse == Recurse.Full ? SvnDepth.Infinity : SvnDepth.Empty;
         }
 
         public void Add(string filename, Recurse recurse)

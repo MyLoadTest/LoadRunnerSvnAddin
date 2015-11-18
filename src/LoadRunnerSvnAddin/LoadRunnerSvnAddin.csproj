@@ -99,6 +99,7 @@
     <Compile Include="Commands\BranchCommand.cs" />
     <Compile Include="Commands\CheckoutCommand.cs" />
     <Compile Include="Commands\CleanupCommand.cs" />
+    <Compile Include="Commands\RefreshAllStatusCommand.cs" />
     <Compile Include="Commands\CommitWorkingCopyCommand.cs" />
     <Compile Include="Commands\CommitCommand.cs" />
     <Compile Include="Commands\CreatePatchCommand.cs" />
